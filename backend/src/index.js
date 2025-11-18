@@ -2,19 +2,6 @@ import dotenv from 'dotenv';
 import connectDB from './config/database.js';
 import app from './app.js';
 
-// Diagnostic handlers to capture uncaught errors and exit reason
-process.on('uncaughtException', (err) => {
-    console.error('uncaughtException:', err && err.stack ? err.stack : err);
-});
-
-process.on('unhandledRejection', (reason) => {
-    console.error('unhandledRejection:', reason && reason.stack ? reason.stack : reason);
-});
-
-process.on('exit', (code) => {
-    console.log('Process exiting with code:', code);
-});
-
 dotenv.config({
     path: './.env'
 });
@@ -25,8 +12,7 @@ const startServer = async () => {
         await connectDB();
 
         app.on('error', (error) => {
-            console.log('ERROR', error);
-            throw error;
+            console.error('ERROR', error);
         });
 
         app.listen(process.env.PORT || 8000, () => {
